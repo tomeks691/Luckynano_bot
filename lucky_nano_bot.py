@@ -82,40 +82,38 @@ chrome_options.add_experimental_option(
 )
 chrome_options.add_experimental_option("useAutomationExtension", False)
 login, password = get_login_and_password()
-while True:
-    try:
-        if platform.system() == "Linux":
-            driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', options=chrome_options)
-        elif platform.system() == "Windows":
-            s = Service(ChromeDriverManager().install())
-            driver = webdriver.Chrome(
-                service=s, chrome_options=chrome_options
-            )
-        now = datetime.now()
-        current_time = now.strftime("%H:%M:%S")
-        if current_time == "22:30:50":
-            time.sleep(300)
-        driver.get("https://www.luckynano.com/")
-        driver.maximize_window()
-        driver.implicitly_wait(10)
-        time.sleep(1)
-        driver.find_element(By.CSS_SELECTOR, "#ihm_login_button > span").click()
-        time.sleep(random.randint(1, 3))
-        driver.find_element(By.CSS_SELECTOR, "#name").send_keys(login)
-        time.sleep(random.randint(1, 3))
-        driver.find_element(By.CSS_SELECTOR, "#pw").send_keys(password)
-        time.sleep(random.randint(1, 3))
-        driver.find_element(By.CSS_SELECTOR, "#login_form_button > span").click()
-        send_notification("Login correct")
-        time.sleep(random.randint(2, 4))
-        get_lottery_time()
-        time.sleep(random.randint(2, 4))
-        faucet_coin()
-        time.sleep(random.randint(2, 4))
-        play_minigame()
-        time.sleep(1)
-        send_notification("The End")
-        waiting_and_ending_driver()
-    except:
-        driver.close()
-        continue
+try:
+    if platform.system() == "Linux":
+        driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', options=chrome_options)
+    elif platform.system() == "Windows":
+        s = Service(ChromeDriverManager().install())
+        driver = webdriver.Chrome(
+            service=s, chrome_options=chrome_options
+        )
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    if current_time == "22:30:50":
+        time.sleep(300)
+    driver.get("https://www.luckynano.com/")
+    driver.maximize_window()
+    driver.implicitly_wait(10)
+    time.sleep(1)
+    driver.find_element(By.CSS_SELECTOR, "#ihm_login_button > span").click()
+    time.sleep(random.randint(1, 3))
+    driver.find_element(By.CSS_SELECTOR, "#name").send_keys(login)
+    time.sleep(random.randint(1, 3))
+    driver.find_element(By.CSS_SELECTOR, "#pw").send_keys(password)
+    time.sleep(random.randint(1, 3))
+    driver.find_element(By.CSS_SELECTOR, "#login_form_button > span").click()
+    send_notification("Login correct")
+    time.sleep(random.randint(2, 4))
+    get_lottery_time()
+    time.sleep(random.randint(2, 4))
+    faucet_coin()
+    time.sleep(random.randint(2, 4))
+    play_minigame()
+    time.sleep(1)
+    send_notification("The End")
+    waiting_and_ending_driver()
+except:
+    driver.close()
