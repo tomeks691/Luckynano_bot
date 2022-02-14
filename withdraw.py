@@ -31,7 +31,7 @@ def get_email():
 
 def send_notification(message):
     api_bot = os.environ.get("api_bot")
-    chat_id = os.environ.get("chat_id")
+    chat_id = os.environ.get("user_id")
     bot = telepot.Bot(api_bot)
     bot.sendMessage(chat_id, message)
 
