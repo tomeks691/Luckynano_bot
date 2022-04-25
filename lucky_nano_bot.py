@@ -3,7 +3,6 @@ import platform
 import random
 import time
 from datetime import datetime
-import telepot
 from dotenv import load_dotenv, find_dotenv
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -13,19 +12,11 @@ from selenium.webdriver.common.keys import Keys
 from webdriver_manager.chrome import ChromeDriverManager
 
 
-def send_notification(message):
-    api_bot = os.environ.get("api_bot")
-    chat_id = os.environ.get("user_id")
-    bot = telepot.Bot(api_bot)
-    bot.sendMessage(chat_id, message)
-
-
 def get_lottery_time():
     chat = driver.find_element(By.CSS_SELECTOR, "#chat-input")
     chat.send_keys("/lottery")
     chat.send_keys(Keys.RETURN)
     lottery_time = driver.find_elements(By.CLASS_NAME, "chat_system_message")
-    send_notification(lottery_time[-1].text)
     if lottery_time[-1].text[-8:] == "a prize.":
         chat = driver.find_element(By.CSS_SELECTOR, "#chat-input")
         chat.send_keys("lotto")
@@ -60,11 +51,6 @@ def faucet_coin():
     driver.find_element(By.CSS_SELECTOR, "#bonus_claim").click()
 
 
-def waiting_and_ending_driver():
-    driver.close()
-    time.sleep(random.randint(1800, 1810))
-
-
 def get_login_and_password():
     login = os.environ.get("nano_login")
     password = os.environ.get("nano_password")
@@ -82,38 +68,33 @@ chrome_options.add_experimental_option(
 )
 chrome_options.add_experimental_option("useAutomationExtension", False)
 login, password = get_login_and_password()
-try:
-    if platform.system() == "Linux":
-        driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', options=chrome_options)
-    elif platform.system() == "Windows":
-        s = Service(ChromeDriverManager().install())
-        driver = webdriver.Chrome(
-            service=s, chrome_options=chrome_options
-        )
-    now = datetime.now()
-    current_time = now.strftime("%H:%M:%S")
-    if current_time == "22:30:50":
-        time.sleep(300)
-    driver.get("https://www.luckynano.com/")
-    driver.maximize_window()
-    driver.implicitly_wait(10)
-    time.sleep(1)
-    driver.find_element(By.CSS_SELECTOR, "#ihm_login_button > span").click()
-    time.sleep(random.randint(1, 3))
-    driver.find_element(By.CSS_SELECTOR, "#name").send_keys(login)
-    time.sleep(random.randint(1, 3))
-    driver.find_element(By.CSS_SELECTOR, "#pw").send_keys(password)
-    time.sleep(random.randint(1, 3))
-    driver.find_element(By.CSS_SELECTOR, "#login_form_button > span").click()
-    send_notification("Login correct")
-    time.sleep(random.randint(2, 4))
-    get_lottery_time()
-    time.sleep(random.randint(2, 4))
-    faucet_coin()
-    time.sleep(random.randint(2, 4))
-    play_minigame()
-    time.sleep(1)
-    send_notification("The End")
-    waiting_and_ending_driver()
-except:
-    driver.close()
+print(login, password)
+
+if platform.system() == "Linux":
+    driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', options=chrome_options)
+else:
+    s = Service(ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=s, options=chrome_options)
+now = datetime.now()
+current_time = now.strftime("%H:%M:%S")
+if current_time == "22:30:50":
+    time.sleep(300)
+driver.get("https://www.luckynano.com/")
+driver.maximize_window()
+driver.implicitly_wait(10)
+time.sleep(1)
+driver.find_element(By.CSS_SELECTOR, "#ihm_login_button > span").click()
+time.sleep(random.randint(1, 3))
+driver.find_element(By.CSS_SELECTOR, "#name").send_keys(login)
+time.sleep(random.randint(1, 3))
+driver.find_element(By.CSS_SELECTOR, "#pw").send_keys(password)
+time.sleep(random.randint(1, 3))
+driver.find_element(By.CSS_SELECTOR, "#login_form_button > span").click()
+time.sleep(random.randint(2, 4))
+get_lottery_time()
+time.sleep(random.randint(2, 4))
+faucet_coin()
+time.sleep(random.randint(2, 4))
+play_minigame()
+time.sleep(1)
+driver.close()
