@@ -5,11 +5,11 @@ import time
 from datetime import datetime
 from dotenv import load_dotenv, find_dotenv
 from selenium import webdriver
-from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.firefox.options import Options
-from webdriver_manager.firefox import GeckoDriverManager
+from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 def get_lottery_time():
@@ -59,19 +59,18 @@ def get_login_and_password():
 
 load_dotenv(find_dotenv())
 prefs = {"credentials_enable_service": False, "profile.password_manager_enabled": False}
-firefox_options = Options()
-firefox_options.add_argument('start-maximized')
-firefox_options.add_argument('--headless')
-firefox_options.add_argument('--no-sandbox')
-firefox_options.add_argument('--disable-dev-shm-usage')
+chrome_options = Options()
+chrome_options.add_argument('start-maximized')
+chrome_options.add_argument('--headless')
+chrome_options.add_argument('--no-sandbox')
+chrome_options.add_argument('--disable-dev-shm-usage')
 login, password = get_login_and_password()
-print(login, password)
 
 if platform.system() == "Linux":
-    driver = webdriver.Firefox('/usr/local/bin/geckodriver', options=firefox_options)
+    driver = webdriver.Firefox('/usr/local/bin', options=chrome_options)
 else:
-    s = Service(GeckoDriverManager().install())
-    driver = webdriver.Firefox(service=s, options=firefox_options)
+    s = Service(ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=s, options=chrome_options)
 now = datetime.now()
 current_time = now.strftime("%H:%M:%S")
 if current_time == "22:30:50":
