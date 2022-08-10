@@ -68,7 +68,7 @@ login, password = get_login_and_password()
 print(login, password)
 
 if platform.system() == "Linux":
-    driver = webdriver.Chrome('/usr/local/bin/geckodriver', options=firefox_options)
+    driver = webdriver.Firefox('/usr/local/bin/geckodriver', options=firefox_options)
 else:
     s = Service(GeckoDriverManager().install())
     driver = webdriver.Firefox(service=s, options=firefox_options)
