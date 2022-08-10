@@ -5,7 +5,7 @@ import time
 from datetime import datetime
 from dotenv import load_dotenv, find_dotenv
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.options import Options
@@ -60,7 +60,10 @@ def get_login_and_password():
 load_dotenv(find_dotenv())
 prefs = {"credentials_enable_service": False, "profile.password_manager_enabled": False}
 firefox_options = Options()
-firefox_options.headless = True
+firefox_options.add_argument('start-maximized')
+firefox_options.add_argument('--headless')
+firefox_options.add_argument('--no-sandbox')
+firefox_options.add_argument('--disable-dev-shm-usage')
 login, password = get_login_and_password()
 print(login, password)
 
