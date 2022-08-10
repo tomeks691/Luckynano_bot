@@ -67,7 +67,7 @@ chrome_options.add_argument('--disable-dev-shm-usage')
 login, password = get_login_and_password()
 
 if platform.system() == "Linux":
-    driver = webdriver.Firefox('/usr/local/bin', options=chrome_options)
+    driver = webdriver.Chrome('/usr/bin/chromedriver', options=chrome_options)
 else:
     s = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=s, options=chrome_options)
