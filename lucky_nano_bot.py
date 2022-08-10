@@ -67,11 +67,11 @@ firefox_options.add_argument('--disable-dev-shm-usage')
 login, password = get_login_and_password()
 print(login, password)
 
-# if platform.system() == "Linux":
-#     driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', options=firefox_options)
-# else:
-s = Service(GeckoDriverManager().install())
-driver = webdriver.Firefox(service=s, options=firefox_options)
+if platform.system() == "Linux":
+    driver = webdriver.Chrome('/usr/local/bin/geckodriver', options=firefox_options)
+else:
+    s = Service(GeckoDriverManager().install())
+    driver = webdriver.Firefox(service=s, options=firefox_options)
 now = datetime.now()
 current_time = now.strftime("%H:%M:%S")
 if current_time == "22:30:50":
