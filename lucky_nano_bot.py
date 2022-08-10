@@ -5,11 +5,11 @@ import time
 from datetime import datetime
 from dotenv import load_dotenv, find_dotenv
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.firefox.options import Options
+from webdriver_manager.firefox import GeckoDriverManager
 
 
 def get_lottery_time():
@@ -59,22 +59,16 @@ def get_login_and_password():
 
 load_dotenv(find_dotenv())
 prefs = {"credentials_enable_service": False, "profile.password_manager_enabled": False}
-chrome_options = Options()
-chrome_options.add_argument("--lang=en")
-chrome_options.add_experimental_option("prefs", prefs)
-chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-chrome_options.add_experimental_option(
-    "prefs", {"profile.managed_default_content_settings.javascript": 1}
-)
-chrome_options.add_experimental_option("useAutomationExtension", False)
+firefox_options = Options()
+firefox_options.headless = True
 login, password = get_login_and_password()
 print(login, password)
 
-if platform.system() == "Linux":
-    driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', options=chrome_options)
-else:
-    s = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=s, options=chrome_options)
+# if platform.system() == "Linux":
+#     driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', options=firefox_options)
+# else:
+s = Service(GeckoDriverManager().install())
+driver = webdriver.Firefox(service=s, options=firefox_options)
 now = datetime.now()
 current_time = now.strftime("%H:%M:%S")
 if current_time == "22:30:50":
