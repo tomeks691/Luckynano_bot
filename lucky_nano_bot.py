@@ -42,11 +42,11 @@ def play_minigame():
             time.sleep(1)
             driver.find_element(By.CSS_SELECTOR,
                                 "#header_content > div.header_game_wrapper > div.header_game.mini_dice").click()
-            time.sleep(random.randint(2, 3))
+            time.sleep(random.randint(3, 5))
             driver.find_element(By.CSS_SELECTOR, "#dice_bet_auto").click()
-            time.sleep(random.randint(2, 3))
+            time.sleep(random.randint(3, 5))
             driver.find_element(By.CSS_SELECTOR, "#dice_auto_bet > input[type=number]").send_keys(f"{Keys.BACKSPACE}4")
-            time.sleep(random.randint(2, 3))
+            time.sleep(random.randint(3, 5))
             driver.find_element(By.CSS_SELECTOR, "#dice_auto_start").click()
             while coins > 0:
                 time.sleep(random.randint(1, 20))
