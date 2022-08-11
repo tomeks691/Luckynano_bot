@@ -2,6 +2,7 @@ import os
 import platform
 import random
 import time
+import psutil
 from datetime import datetime
 from dotenv import load_dotenv, find_dotenv
 from selenium import webdriver
@@ -10,6 +11,13 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
+
+
+def kill_pid():
+    proc_name = "chromium-browser"
+    for proc in psutil.process_iter():
+        if proc.name() == proc_name:
+            proc.kill()
 
 
 def get_lottery_time():
@@ -94,3 +102,5 @@ time.sleep(random.randint(2, 4))
 play_minigame()
 time.sleep(1)
 driver.close()
+if platform.system() == "Linux":
+    kill_pid()

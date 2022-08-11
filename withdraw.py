@@ -29,12 +29,6 @@ def get_email():
         return url
 
 
-def send_notification(message):
-    api_bot = os.environ.get("api_bot")
-    chat_id = os.environ.get("user_id")
-    bot = telepot.Bot(api_bot)
-    bot.sendMessage(chat_id, message)
-
 
 def get_login_and_password():
     login = os.environ.get("nano_login")
@@ -82,10 +76,8 @@ time.sleep(random.randint(1, 3))
 driver.find_element(By.CSS_SELECTOR, "#pw").send_keys(password)
 time.sleep(random.randint(1, 3))
 driver.find_element(By.CSS_SELECTOR, "#login_form_button > span").click()
-send_notification("Login correct")
 time.sleep(random.randint(2, 4))
 nano_amount = driver.find_element(By.CSS_SELECTOR, "#header_nano_count > span").text
-send_notification(f"Nano: {nano_amount}")
 make_withdraw()
 time.sleep(50)
 url = get_email()
