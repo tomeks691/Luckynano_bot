@@ -46,15 +46,10 @@ def make_withdraw():
 load_dotenv(find_dotenv())
 prefs = {"credentials_enable_service": False, "profile.password_manager_enabled": False}
 chrome_options = Options()
-chrome_options.add_argument("--lang=pl")
-# chrome_options.add_argument('--headless')
-# chrome_options.add_argument('--disable-gpu')
-chrome_options.add_experimental_option("prefs", prefs)
-chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-chrome_options.add_experimental_option(
-    "prefs", {"profile.managed_default_content_settings.javascript": 1}
-)
-chrome_options.add_experimental_option("useAutomationExtension", False)
+chrome_options.add_argument('start-maximized')
+chrome_options.add_argument('--headless')
+chrome_options.add_argument('--no-sandbox')
+chrome_options.add_argument('--disable-dev-shm-usage')
 login, password = get_login_and_password()
 if platform.system() == "Linux":
     driver = webdriver.Chrome('/usr/bin/chromedriver', options=chrome_options)
