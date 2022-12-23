@@ -9,19 +9,17 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-import telepot
 import platform
-
-
 def get_email():
+    load_dotenv(find_dotenv())
     user = os.environ.get("email_login")
     password_email = os.environ.get("email_password")
+    print(user, password_email)
     server = "imap.gmail.com"
     mb = MailBox(server).login(user, password_email)
-    messages = mb.fetch(criteria=AND(seen=False, from_="luckynano.com"),
+    messages = mb.fetch(criteria=AND(seen=True, from_="luckynano.com"),
                         mark_seen=True,
                         bulk=True)
-
     for msg in messages:
         soup = BeautifulSoup(msg.html, 'html.parser')
         el = soup.find(href=True)
@@ -37,13 +35,13 @@ def get_login_and_password():
 
 
 def make_withdraw():
-    driver.find_element_by_css_selector("#header_content > div.account_name").click()
+    driver.find_element(By.CSS_SELECTOR, "#header_content > div.account_name").click()
     time.sleep(random.randint(2, 4))
-    driver.find_element_by_css_selector("#withdraw_button").click()
+    driver.find_element(By.CSS_SELECTOR, "#withdraw_button").click()
     time.sleep(random.randint(2, 4))
-    driver.find_element_by_css_selector("#withdraw_button_max").click()
+    driver.find_element(By.CSS_SELECTOR, "#withdraw_button_max").click()
     time.sleep(random.randint(2, 4))
-    driver.find_element_by_css_selector("#withdraw_button_ok").click()
+    driver.find_element(By.CSS_SELECTOR, "#withdraw_button_ok").click()
 
 load_dotenv(find_dotenv())
 prefs = {"credentials_enable_service": False, "profile.password_manager_enabled": False}
@@ -59,12 +57,10 @@ chrome_options.add_experimental_option(
 chrome_options.add_experimental_option("useAutomationExtension", False)
 login, password = get_login_and_password()
 if platform.system() == "Linux":
-    driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', chrome_options=chrome_options)
-elif platform.system() == "Windows":
+    driver = webdriver.Chrome('/usr/bin/chromedriver', options=chrome_options)
+else:
     s = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(
-        service=s, chrome_options=chrome_options
-    )
+    driver = webdriver.Chrome(service=s, options=chrome_options)
 driver.get("https://www.luckynano.com/")
 driver.maximize_window()
 driver.implicitly_wait(10)
