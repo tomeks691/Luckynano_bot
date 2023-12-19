@@ -1,7 +1,9 @@
 import time
 import random
 import os
+import sqlite3
 import sys
+import platform
 from imap_tools import MailBox, AND
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -10,7 +12,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-import platform
+from datetime import date
 
 
 def get_email():
@@ -35,6 +37,24 @@ def get_login_and_password():
     return login, password
 
 
+def initialize_db():
+    conn = sqlite3.connect('nano_amount.db')
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS nano_amount (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nano TEXT,
+    date_added DATE)
+''')
+    conn.commit()
+    conn.close()
+
+def check_if_link_exist(nano_amount, current_date):
+    conn = sqlite3.connect('nano_amount.db')
+    c = conn.cursor()
+    c.execute("INSERT INTO nano_amount (nano, date_added) VALUES (?, ?)", (nano_amount, current_date))
+    conn.commit()
+    conn.close()
+
 def make_withdraw():
     driver.find_element(By.CSS_SELECTOR, "#header_content > div.account_name").click()
     time.sleep(random.randint(2, 4))
@@ -48,6 +68,7 @@ def make_withdraw():
     if text_error_message[:6] == "Please":
         driver.close()
         sys.exit()
+
 
 def check_error():
     error_window = driver.find_element(By.CSS_SELECTOR, "#error_window")
@@ -89,3 +110,6 @@ while not url:
 driver.get(url)
 time.sleep(2)
 driver.close()
+current_date = date.today()
+initialize_db()
+check_if_link_exist(nano_amount, current_date)
