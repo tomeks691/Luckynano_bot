@@ -85,7 +85,8 @@ chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--disable-dev-shm-usage')
 login, password = get_login_and_password()
 if platform.system() == "Linux":
-    driver = webdriver.Chrome('/usr/bin/chromedriver', options=chrome_options)
+    service = Service(executable_path=r'/usr/bin/chromedriver')
+    driver = webdriver.Chrome(service=service, options=chrome_options)
 else:
     s = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=s, options=chrome_options)
